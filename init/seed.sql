@@ -8,6 +8,18 @@ CREATE TABLE products (
     PRIMARY KEY(product_id)
 );
 
+CREATE TABLE `users` (
+  `user_id` int NOT NULL AUTO_INCREMENT,
+  `first_name` varchar(255) NOT NULL,
+  `last_name` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `phone` varchar(20) DEFAULT NULL,
+  PRIMARY KEY (`user_id`),
+  UNIQUE KEY `IDX_97672ac88f789774dd47f7c8be` (`email`)
+)
+
 INSERT INTO products (name, price, description) VALUES ('Red Pen', 2.23, 'lorem ipsum dolor sit amet');
 INSERT INTO products (name, price, description) VALUES ('Painting Brush', 10.9, 'some high quality painting brush');
 INSERT INTO products (name, price, description) VALUES ('Eraser', 1.23, 'lorem ipsum dolor sit amet erat, sed diam nonum nonummy ut labore et dolore magna aliquet'); 
