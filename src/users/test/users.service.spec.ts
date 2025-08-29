@@ -5,13 +5,16 @@ import { Repository } from 'typeorm';
 import { User } from '../user.entity';
 import { UsersService } from '../users.service';
 import { mockUsersRepository } from './mockUsersRepository';
-import { usersStub, userStub, createUserDtoStub } from './user.stub';
+import { usersStub, userStub, createUserDtoStub, randomUserApiStub } from './user.stub';
+import axios from 'axios';
 
 describe('UsersService', () => {
   let service: UsersService;
   let userRepository: Repository<User>;
 
   beforeEach(async () => {
+    // Mock axios
+    jest.spyOn(axios, 'get').mockResolvedValue(randomUserApiStub());
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         UsersService,
@@ -213,6 +216,56 @@ describe('UsersService', () => {
         user_id: id,
       });
       expect(userRepository.delete).toBeCalledTimes(0);
+    });
+  });
+
+  describe('createRandomUser', () => {
+    it('should successfully create a random user', async () => {
+      const randomUser = await service.createRandomUser();
+      expect(randomUser).toEqual(userStub());
+      expect(axios.get).toBeCalledWith('https://randomuser.me/api/');
+      expect(userRepository.findOne).toBeCalledWith({
+        where: { email: 'katherine.soto@example.com' },
+      });
+      expect(userRepository.create).toBeCalledWith({
+        first_name: 'Katherine',
+        last_name: 'Soto',
+        email: 'katherine.soto@example.com',
+        phone: '031-701-9611',
+      });
+      expect(userRepository.save).toBeCalledTimes(1);
+    });
+
+    it('should throw an error when email already exists', async () => {
+      const spy = jest
+        .spyOn(userRepository, 'findOne')
+        .mockResolvedValueOnce(userStub()); // Email already exists
+
+      await expect(service.createRandomUser()).rejects.toThrowError(
+        new HttpException(
+          'User with this email already exists.',
+          HttpStatus.CONFLICT,
+        ),
+      );
+      expect(spy).toBeCalledWith({
+        where: { email: 'katherine.soto@example.com' },
+      });
+      expect(userRepository.create).toBeCalledTimes(0);
+      expect(userRepository.save).toBeCalledTimes(0);
+    });
+
+    it('should throw an error when external API fails', async () => {
+      jest.spyOn(axios, 'get').mockRejectedValueOnce(new Error('API Error'));
+
+      await expect(service.createRandomUser()).rejects.toThrowError(
+        new HttpException(
+          'Failed to create random user. Please try again.',
+          HttpStatus.INTERNAL_SERVER_ERROR,
+        ),
+      );
+      expect(userRepository.findOne).toBeCalledTimes(0);
+      expect(userRepository.create).toBeCalledTimes(0);
+      expect(userRepository.save).toBeCalledTimes(0);
     });
   });
 });

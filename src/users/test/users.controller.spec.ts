@@ -18,6 +18,7 @@ describe('UsersController', () => {
             getLast: jest.fn().mockResolvedValue(userStub()),
             getOneById: jest.fn().mockResolvedValue(userStub()),
             create: jest.fn().mockResolvedValue(userStub()),
+            createRandomUser: jest.fn().mockResolvedValue(userStub()),
             update: jest.fn().mockResolvedValue(userStub()),
             delete: jest.fn().mockResolvedValue(1),
           },
@@ -67,6 +68,14 @@ describe('UsersController', () => {
       const user = await controller.create(createUserDto);
       expect(user).toEqual(userStub());
       expect(service.create).toBeCalledWith(createUserDto);
+    });
+  });
+
+  describe('createRandom', () => {
+    it('should create a random user', async () => {
+      const user = await controller.createRandom();
+      expect(user).toEqual(userStub());
+      expect(service.createRandomUser).toBeCalledTimes(1);
     });
   });
 

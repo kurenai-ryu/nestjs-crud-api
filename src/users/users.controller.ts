@@ -39,6 +39,11 @@ export class UsersController {
     return this.usersService.create(user);
   }
 
+  @Post('random')
+  async createRandom(): Promise<User> {
+    return this.usersService.createRandomUser();
+  }
+
   @Patch(':id')
   @UsePipes(ValidationPipe)
   async update(
