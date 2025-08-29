@@ -17,7 +17,7 @@ CREATE TABLE `users` (
   `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `phone` varchar(20) DEFAULT NULL,
   PRIMARY KEY (`user_id`),
-  UNIQUE KEY `IDX_97672ac88f789774dd47f7c8be` (`email`)
+  UNIQUE KEY `IDX_email` (`email`)
 )
 
 INSERT INTO products (name, price, description) VALUES ('Red Pen', 2.23, 'lorem ipsum dolor sit amet');
