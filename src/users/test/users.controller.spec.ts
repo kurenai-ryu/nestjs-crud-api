@@ -15,6 +15,7 @@ describe('UsersController', () => {
           provide: UsersService,
           useValue: {
             getAll: jest.fn().mockResolvedValue(usersStub()),
+            getLast: jest.fn().mockResolvedValue(userStub()),
             getOneById: jest.fn().mockResolvedValue(userStub()),
             create: jest.fn().mockResolvedValue(userStub()),
             update: jest.fn().mockResolvedValue(userStub()),
@@ -41,6 +42,14 @@ describe('UsersController', () => {
       const users = await controller.getAll();
       expect(users).toEqual(usersStub());
       expect(service.getAll).toBeCalledTimes(1);
+    });
+  });
+
+  describe('getLast', () => {
+    it('should return the last user added', async () => {
+      const lastUser = await controller.getLast();
+      expect(lastUser).toEqual(userStub());
+      expect(service.getLast).toBeCalledTimes(1);
     });
   });
 

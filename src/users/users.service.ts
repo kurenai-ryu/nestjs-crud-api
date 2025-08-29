@@ -14,6 +14,26 @@ export class UsersService {
     return await this.userRepository.find();
   }
 
+  async getLast(): Promise<User> {
+    try {
+      const lastUser = await this.userRepository.findOne({
+        order: { user_id: 'DESC' },
+      });
+      
+      if (!lastUser) {
+        throw new HttpException(
+          'No users found.',
+          HttpStatus.NOT_FOUND,
+        );
+      }
+      
+      return lastUser;
+    } catch (err) {
+      console.log('Get last user error: ', err.message ?? err);
+      throw err;
+    }
+  }
+
   async getOneById(id: number): Promise<User> {
     try {
       return await this.userRepository.findOneOrFail({

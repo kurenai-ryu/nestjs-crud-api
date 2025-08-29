@@ -42,6 +42,27 @@ describe('UsersService', () => {
     });
   });
 
+  describe('getLast', () => {
+    it('should return the last user added', async () => {
+      const lastUser = await service.getLast();
+      expect(lastUser).toEqual(userStub());
+      expect(userRepository.findOne).toBeCalledWith({
+        order: { user_id: 'DESC' },
+      });
+    });
+
+    it('should return an http error when no users exist', async () => {
+      const spy = jest
+        .spyOn(userRepository, 'findOne')
+        .mockResolvedValueOnce(null);
+      
+      await expect(service.getLast()).rejects.toThrowError(HttpException);
+      expect(spy).toBeCalledWith({
+        order: { user_id: 'DESC' },
+      });
+    });
+  });
+
   describe('getOneById', () => {
     it('should get a single user', async () => {
       const user = await service.getOneById(1);

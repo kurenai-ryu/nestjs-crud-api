@@ -23,6 +23,11 @@ export class UsersController {
     return this.usersService.getAll();
   }
 
+  @Get('last')
+  async getLast(): Promise<User> {
+    return this.usersService.getLast();
+  }
+
   @Get(':id')
   async getOne(@Param('id', ParseIntPipe) id: number): Promise<User> {
     return this.usersService.getOneById(id);
