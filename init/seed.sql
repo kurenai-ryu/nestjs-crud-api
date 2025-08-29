@@ -12,3 +12,5 @@ INSERT INTO products (name, price, description) VALUES ('Red Pen', 2.23, 'lorem 
 INSERT INTO products (name, price, description) VALUES ('Painting Brush', 10.9, 'some high quality painting brush');
 INSERT INTO products (name, price, description) VALUES ('Eraser', 1.23, 'lorem ipsum dolor sit amet erat, sed diam nonum nonummy ut labore et dolore magna aliquet'); 
 INSERT INTO products (name, price, description) VALUES ('Notebook', 5.50, 'a popular notebook among art students');
+INSERT INTO users (first_name, last_name, email, phone) VALUES ('John', 'Doe', 'john.doe@example.com', '+1234567890');
+INSERT INTO users (first_name, last_name, email, phone) VALUES ('Juan', 'Perez', 'juan@perz.local', '555-111111');
